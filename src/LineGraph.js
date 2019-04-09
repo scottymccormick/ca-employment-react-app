@@ -5,30 +5,68 @@ class LineGraph extends Component {
   loadData() {
     fetch('http://localhost:5000/api')
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => this.parseData(data))
       .catch(error => console.log(error))
   }
-  drawGraph() {
-    const data = [12, 5, 8, 15, 3, 9]
+  parseData(data) {
+    const parsedArr = []
+    for (let i = 0; i < data.length; i++) {
+      const element = data[i];
+      const parsedElement = {
+        date: new Date(element.date),
+        employment: element.current_employment
+      }
+      parsedArr.push(parsedElement)
+    }
+    parsedArr.sort((a, b) => a.date - b.date)
+    this.drawLine(parsedArr)
+  }
+  drawLine(arr) {
+    var svgWidth = 600, svgHeight = 400;
+    var margin = { top: 20, right: 20, bottom: 30, left: 50 };
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
+    var svg = d3.select('svg')
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
+      
+    const g = svg.append("g")
+      .attr("transform", 
+        "translate(" + margin.left + "," + margin.top + ")"
+      );
 
-    const svg = d3.select('svg').attr("width", 700).attr("height", 300)
+    let x = d3.scaleTime().rangeRound([0, width]);
+    let y = d3.scaleLinear().rangeRound([height, 0]);
+    
+    const line = d3.line()
+      .x(d => x(d.date))
+      .y(d => y(d.employment))
+      x.domain(d3.extent(arr, d => d.date))
+      y.domain(d3.extent(arr, d => d.employment))
+    
+    g.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x))      
 
-    svg.selectAll("rect").data(data).enter().append("rect")
-      .attr("x", (d, i) => i * 70)
-      .attr("y", 0)
-      .attr("width", 35)
-      .attr("height", (d, i) => 300 - d * 10)
-      .attr("fill", "blue")
+    g.append("g").call(d3.axisLeft(y))
 
+    g.append("path")
+      .datum(arr)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 1.5)
+      .attr("d", line);
   }
   componentDidMount() {
     this.loadData()
-    this.drawGraph()
   }
   render() {
     return (
       <div>
         <h3>Line Graph</h3>
+        <h4>Manufacturing in Contra Costa County</h4>
         <svg></svg>
       </div>
     )
