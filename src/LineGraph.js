@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 class LineGraph extends Component {
+  loadData() {
+    fetch('http://localhost:5000/api')
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.log(error))
+  }
   drawGraph() {
     const data = [12, 5, 8, 15, 3, 9]
 
@@ -16,6 +22,7 @@ class LineGraph extends Component {
 
   }
   componentDidMount() {
+    this.loadData()
     this.drawGraph()
   }
   render() {
