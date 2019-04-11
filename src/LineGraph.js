@@ -2,8 +2,17 @@ import React, { Component } from 'react'
 import * as d3 from 'd3'
 
 class LineGraph extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      industry: "Manufacturing",
+      area: "Contra Costa County"
+    }
+  }
   loadData() {
-    fetch('http://localhost:5000/api')
+    const urlString = `http://localhost:5000/api?area_name=${this.state.area}&industry_title=${this.state.industry}`
+    fetch(urlString)
       .then(response => response.json())
       .then(data => this.parseData(data))
       .catch(error => console.log(error))
