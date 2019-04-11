@@ -84,10 +84,8 @@ class LineGraph extends Component {
     }
   }
   render() {
-    console.log(this.state)
     return (
       <div>
-        {/* <h3>Line Graph</h3> */}
         <label htmlFor="area-picker">Choose a County:</label>
         <select name="area" id="area-picker" defaultValue={this.state.area} 
           onChange={this.selectChange}>
