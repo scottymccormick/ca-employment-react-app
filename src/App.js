@@ -7,7 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <header>
-          <h1>CA Employment App</h1>
+          <h1>California Employment Trends</h1>
         </header>
         <LineGraph />
       </div>

@@ -1,9 +1,19 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
+import { counties, industries } from './selectData'
 
 class LineGraph extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      industry: "Manufacturing",
+      area: "Contra Costa County"
+    }
+  }
   loadData() {
-    fetch('http://localhost:5000/api')
+    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}`
+    fetch(urlString)
       .then(response => response.json())
       .then(data => this.parseData(data))
       .catch(error => console.log(error))
@@ -59,14 +69,42 @@ class LineGraph extends Component {
       .attr("stroke-width", 1.5)
       .attr("d", line);
   }
+  selectChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
   componentDidMount() {
     this.loadData()
+  }
+  componentDidUpdate(prevState) {
+    if (prevState.industry !== this.state.industry) {
+      d3.select("svg").selectAll("g").remove()
+      this.loadData()
+    }
   }
   render() {
     return (
       <div>
-        <h3>Line Graph</h3>
-        <h4>Manufacturing in Contra Costa County</h4>
+        <label htmlFor="area-picker">Choose a County:</label>
+        <select name="area" id="area-picker" defaultValue={this.state.area} 
+          onChange={this.selectChange}>
+          { counties.map((county) => {
+            return (
+              <option key={county} value={county}>{county}</option>
+            )
+          })}
+        </select>
+        <br/>
+        <label htmlFor="industry-picker">Choose an Industry:</label>
+        <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
+          { industries.map((industry) => {
+            return (
+              <option key={industry} value={industry}>{industry}</option>
+            )
+          })}
+        </select>
+        <h4>{this.state.industry} in {this.state.area}</h4>
         <svg></svg>
       </div>
     )
