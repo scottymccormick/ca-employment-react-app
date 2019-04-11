@@ -12,7 +12,7 @@ class LineGraph extends Component {
     }
   }
   loadData() {
-    const urlString = `http://localhost:5000/api?area_name=${this.state.area}&industry_title=${this.state.industry}`
+    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}`
     fetch(urlString)
       .then(response => response.json())
       .then(data => this.parseData(data))
@@ -69,15 +69,28 @@ class LineGraph extends Component {
       .attr("stroke-width", 1.5)
       .attr("d", line);
   }
+  selectChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
   componentDidMount() {
     this.loadData()
   }
+  componentDidUpdate(prevState) {
+    if (prevState.industry !== this.state.industry) {
+      d3.select("svg").selectAll("g").remove()
+      this.loadData()
+    }
+  }
   render() {
+    console.log(this.state)
     return (
       <div>
         {/* <h3>Line Graph</h3> */}
         <label htmlFor="area-picker">Choose a County:</label>
-        <select name="area" id="area-picker" defaultValue={this.state.area}>
+        <select name="area" id="area-picker" defaultValue={this.state.area} 
+          onChange={this.selectChange}>
           { counties.map((county) => {
             return (
               <option key={county} value={county}>{county}</option>
@@ -86,7 +99,7 @@ class LineGraph extends Component {
         </select>
         <br/>
         <label htmlFor="industry-picker">Choose an Industry:</label>
-        <select name="industry" id="industry-picker" defaultValue={this.state.industry}>
+        <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
           { industries.map((industry) => {
             return (
               <option key={industry} value={industry}>{industry}</option>
