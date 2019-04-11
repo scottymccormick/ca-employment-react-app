@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
+import { counties, industries } from './selectData'
 
 class LineGraph extends Component {
   constructor() {
@@ -75,6 +76,13 @@ class LineGraph extends Component {
     return (
       <div>
         <h3>Line Graph</h3>
+        <select name="area">
+          { counties.map((county) => {
+            return (
+              <option key={county} value={county}>{county}</option>
+            )
+          })}
+        </select>
         <h4>Manufacturing in Contra Costa County</h4>
         <svg></svg>
       </div>
