@@ -75,15 +75,25 @@ class LineGraph extends Component {
   render() {
     return (
       <div>
-        <h3>Line Graph</h3>
-        <select name="area">
+        {/* <h3>Line Graph</h3> */}
+        <label htmlFor="area-picker">Choose a County:</label>
+        <select name="area" id="area-picker" defaultValue={this.state.area}>
           { counties.map((county) => {
             return (
               <option key={county} value={county}>{county}</option>
             )
           })}
         </select>
-        <h4>Manufacturing in Contra Costa County</h4>
+        <br/>
+        <label htmlFor="industry-picker">Choose an Industry:</label>
+        <select name="industry" id="industry-picker" defaultValue={this.state.industry}>
+          { industries.map((industry) => {
+            return (
+              <option key={industry} value={industry}>{industry}</option>
+            )
+          })}
+        </select>
+        <h4>{this.state.industry} in {this.state.area}</h4>
         <svg></svg>
       </div>
     )
