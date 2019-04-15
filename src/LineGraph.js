@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
 import { counties, industries } from './selectData'
+import Dropdown from './Dropdown';
 
 class LineGraph extends Component {
   constructor() {
@@ -95,7 +96,7 @@ class LineGraph extends Component {
             )
           })}
         </select>
-        <br/>
+        <Dropdown name="test" id="test" label="Test Input" />
         <label htmlFor="industry-picker">Choose an Industry:</label>
         <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
           { industries.map((industry) => {
