@@ -104,14 +104,8 @@ class LineGraph extends Component {
           })}
         </select>
         <Dropdown name="test" id="test" label="Test Input" handleChange={this.selectChange} data={testData} />
-        <label htmlFor="industry-picker">Choose an Industry:</label>
-        <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
-          { industries.map((industry) => {
-            return (
-              <option key={industry} value={industry}>{industry}</option>
-            )
-          })}
-        </select>
+        <Dropdown name="industry" id="industry-picker" label="Choose an Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
+        
         <h4>{this.state.industry} in {this.state.area}</h4>
         <svg version="1.1"
           baseProfile="full"
