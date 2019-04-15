@@ -9,7 +9,8 @@ class LineGraph extends Component {
 
     this.state = {
       industry: "Manufacturing",
-      area: "Contra Costa County"
+      area: "Contra Costa County",
+      test: "Test 1"
     }
   }
   loadData() {
@@ -96,7 +97,7 @@ class LineGraph extends Component {
             )
           })}
         </select>
-        <Dropdown name="test" id="test" label="Test Input" />
+        <Dropdown name="test" id="test" label="Test Input" handleChange={this.selectChange} />
         <label htmlFor="industry-picker">Choose an Industry:</label>
         <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
           { industries.map((industry) => {
@@ -106,7 +107,9 @@ class LineGraph extends Component {
           })}
         </select>
         <h4>{this.state.industry} in {this.state.area}</h4>
-        <svg></svg>
+        <svg version="1.1"
+          baseProfile="full"
+          xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     )
   }
