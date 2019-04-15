@@ -86,24 +86,9 @@ class LineGraph extends Component {
     }
   }
   render() {
-    const testData = [
-      "Test 1",
-      "Test 2",
-      "Test 3",
-      "Test 4"
-    ]
     return (
       <div>
-        <label htmlFor="area-picker">Choose a County:</label>
-        <select name="area" id="area-picker" defaultValue={this.state.area} 
-          onChange={this.selectChange}>
-          { counties.map((county) => {
-            return (
-              <option key={county} value={county}>{county}</option>
-            )
-          })}
-        </select>
-        <Dropdown name="test" id="test" label="Test Input" handleChange={this.selectChange} data={testData} />
+        <Dropdown name="area" id="area-picker" label="Choose a County" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
         <Dropdown name="industry" id="industry-picker" label="Choose an Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
         
         <h4>{this.state.industry} in {this.state.area}</h4>
