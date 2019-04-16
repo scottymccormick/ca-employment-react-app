@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+select {
+  height: 2em;
+  font-size: 0.9em;
+}
+
 .year-pickers, .dropdown-pickers > div {
   display: flex;
   justify-content: space-between;
