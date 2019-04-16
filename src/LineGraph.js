@@ -89,10 +89,14 @@ class LineGraph extends Component {
   render() {
     return (
       <div>
-        <Dropdown name="area" id="area-picker" label="Choose a County" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
-        <Dropdown name="industry" id="industry-picker" label="Choose an Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
-        <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.selectChange} data={years} defaultValue={this.state.startYear} />
-        <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.selectChange} data={years} defaultValue={this.state.endYear} />
+        <section className="dropdown-pickers">
+          <Dropdown name="area" id="area-picker" label="County" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
+          <Dropdown name="industry" id="industry-picker" label="Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
+        </section>
+        <section className="year-pickers">
+          <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.selectChange} data={years} defaultValue={this.state.startYear} />
+          <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.selectChange} data={years} defaultValue={this.state.endYear} />
+        </section>
         
         <h4>{this.state.industry} in {this.state.area}</h4>
         <svg version="1.1"
