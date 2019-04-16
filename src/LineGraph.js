@@ -11,7 +11,8 @@ class LineGraph extends Component {
       industry: "Manufacturing",
       area: "Contra Costa County",
       startYear: 1990,
-      endYear: 2017
+      endYear: 2017,
+      showError: false
     }
   }
   loadData() {
@@ -83,16 +84,26 @@ class LineGraph extends Component {
       this.setState({
         startYear: this.state.endYear
       })
+      this.displayError("The start year may not exceed the end year")
     } else if (e.target.name === 'endYear' && e.target.value < this.state.startYear) {      
       e.target.value = this.state.startYear
       this.setState({
         endYear: this.state.startYear
       })
+      this.displayError("The end year may not exceed the start year")
     } else {
       this.setState({
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
+        showError: false
       })
     }
+  }
+  displayError(message) {
+    this.setState({
+      showError: true,
+      errorMessage: message
+    })
+    console.log(message)
   }
   componentDidMount() {
     this.loadData()
@@ -114,8 +125,19 @@ class LineGraph extends Component {
           <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.dateChange} data={years} defaultValue={this.state.startYear} />
           <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.dateChange} data={years} defaultValue={this.state.endYear} />
         </section>
-        
-        <h4>{this.state.industry} in {this.state.area}</h4>
+        <div className="message-area">
+          {this.state.showError ?
+          <span className="error-message">
+            {this.state.errorMessage}
+          </span> : null}
+          </div>
+        <h4>{this.state.industry} in {this.state.area} ({this.state.startYear === this.state.endYear ? 
+            this.state.startYear :
+            <span>
+              {this.state.startYear} - {this.state.endYear}
+            </span>
+          })
+          </h4>
         <svg version="1.1"
           baseProfile="full"
           xmlns="http://www.w3.org/2000/svg"></svg>
