@@ -118,8 +118,8 @@ class LineGraph extends Component {
     return (
       <div>
         <section className="dropdown-pickers">
-          <Dropdown name="area" id="area-picker" label="County" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
-          <Dropdown name="industry" id="industry-picker" label="Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
+          <Dropdown name="area" id="area-picker" label="County" color="blue" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
+          <Dropdown name="industry" id="industry-picker" label="Industry" color="red" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
         </section>
         <section className="year-pickers">
           <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.dateChange} data={years} defaultValue={this.state.startYear} />
