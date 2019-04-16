@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
-import { counties, industries } from './selectData'
+import { counties, industries, years } from './selectData'
 import Dropdown from './Dropdown';
 
 class LineGraph extends Component {
@@ -10,11 +10,12 @@ class LineGraph extends Component {
     this.state = {
       industry: "Manufacturing",
       area: "Contra Costa County",
-      test: "Test 1"
+      startYear: 1990,
+      endYear: 2017
     }
   }
   loadData() {
-    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}`
+    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}&startYear=${this.state.startYear}&endYear=${this.state.endYear}`
     fetch(urlString)
       .then(response => response.json())
       .then(data => this.parseData(data))
@@ -90,6 +91,8 @@ class LineGraph extends Component {
       <div>
         <Dropdown name="area" id="area-picker" label="Choose a County" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
         <Dropdown name="industry" id="industry-picker" label="Choose an Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
+        <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.selectChange} data={years} defaultValue={this.state.startYear} />
+        <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.selectChange} data={years} defaultValue={this.state.endYear} />
         
         <h4>{this.state.industry} in {this.state.area}</h4>
         <svg version="1.1"
