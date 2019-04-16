@@ -77,6 +77,23 @@ class LineGraph extends Component {
       [e.target.name]: e.target.value
     })
   }
+  dateChange = e => {
+    if (e.target.name === 'startYear' && e.target.value > this.state.endYear) {
+      e.target.value = this.state.endYear
+      this.setState({
+        startYear: this.state.endYear
+      })
+    } else if (e.target.name === 'endYear' && e.target.value < this.state.startYear) {      
+      e.target.value = this.state.startYear
+      this.setState({
+        endYear: this.state.startYear
+      })
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      })
+    }
+  }
   componentDidMount() {
     this.loadData()
   }
@@ -94,8 +111,8 @@ class LineGraph extends Component {
           <Dropdown name="industry" id="industry-picker" label="Industry" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
         </section>
         <section className="year-pickers">
-          <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.selectChange} data={years} defaultValue={this.state.startYear} />
-          <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.selectChange} data={years} defaultValue={this.state.endYear} />
+          <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.dateChange} data={years} defaultValue={this.state.startYear} />
+          <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.dateChange} data={years} defaultValue={this.state.endYear} />
         </section>
         
         <h4>{this.state.industry} in {this.state.area}</h4>
