@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as d3 from 'd3'
-import { counties, industries } from './selectData'
+import { counties, industries, years } from './selectData'
+import Dropdown from './Dropdown';
 
 class LineGraph extends Component {
   constructor() {
@@ -8,11 +9,14 @@ class LineGraph extends Component {
 
     this.state = {
       industry: "Manufacturing",
-      area: "Contra Costa County"
+      area: "Contra Costa County",
+      startYear: 1990,
+      endYear: 2017,
+      showError: false
     }
   }
   loadData() {
-    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}`
+    const urlString = `http://localhost:5000/api?area=${this.state.area}&industry=${this.state.industry}&startYear=${this.state.startYear}&endYear=${this.state.endYear}`
     fetch(urlString)
       .then(response => response.json())
       .then(data => this.parseData(data))
@@ -24,7 +28,7 @@ class LineGraph extends Component {
       const element = data[i];
       const parsedElement = {
         date: new Date(element.date),
-        employment: element.current_employment
+        employment: parseInt(element.current_employment)
       }
       parsedArr.push(parsedElement)
     }
@@ -74,6 +78,33 @@ class LineGraph extends Component {
       [e.target.name]: e.target.value
     })
   }
+  dateChange = e => {
+    if (e.target.name === 'startYear' && e.target.value > this.state.endYear) {
+      e.target.value = this.state.endYear
+      this.setState({
+        startYear: this.state.endYear
+      })
+      this.displayError("The start year may not exceed the end year")
+    } else if (e.target.name === 'endYear' && e.target.value < this.state.startYear) {      
+      e.target.value = this.state.startYear
+      this.setState({
+        endYear: this.state.startYear
+      })
+      this.displayError("The end year may not exceed the start year")
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value,
+        showError: false
+      })
+    }
+  }
+  displayError(message) {
+    this.setState({
+      showError: true,
+      errorMessage: message
+    })
+    console.log(message)
+  }
   componentDidMount() {
     this.loadData()
   }
@@ -86,26 +117,30 @@ class LineGraph extends Component {
   render() {
     return (
       <div>
-        <label htmlFor="area-picker">Choose a County:</label>
-        <select name="area" id="area-picker" defaultValue={this.state.area} 
-          onChange={this.selectChange}>
-          { counties.map((county) => {
-            return (
-              <option key={county} value={county}>{county}</option>
-            )
-          })}
-        </select>
-        <br/>
-        <label htmlFor="industry-picker">Choose an Industry:</label>
-        <select name="industry" id="industry-picker" defaultValue={this.state.industry} onChange={this.selectChange}>
-          { industries.map((industry) => {
-            return (
-              <option key={industry} value={industry}>{industry}</option>
-            )
-          })}
-        </select>
-        <h4>{this.state.industry} in {this.state.area}</h4>
-        <svg></svg>
+        <section className="dropdown-pickers">
+          <Dropdown name="area" id="area-picker" label="County" color="blue" handleChange={this.selectChange} data={counties} defaultValue={this.state.area} />
+          <Dropdown name="industry" id="industry-picker" label="Industry" color="red" handleChange={this.selectChange} data={industries} defaultValue={this.state.industry} />
+        </section>
+        <section className="year-pickers">
+          <Dropdown name="startYear" id="start-year-picker" label="From" handleChange={this.dateChange} data={years} defaultValue={this.state.startYear} />
+          <Dropdown name="endYear" id="end-year-picker" label="To" handleChange={this.dateChange} data={years} defaultValue={this.state.endYear} />
+        </section>
+        <div className="message-area">
+          {this.state.showError ?
+          <span className="error-message">
+            {this.state.errorMessage}
+          </span> : null}
+          </div>
+        <h4>{this.state.industry} in {this.state.area} ({this.state.startYear === this.state.endYear ? 
+            this.state.startYear :
+            <span>
+              {this.state.startYear} - {this.state.endYear}
+            </span>
+          })
+          </h4>
+        <svg version="1.1"
+          baseProfile="full"
+          xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
     )
   }
