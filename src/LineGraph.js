@@ -28,7 +28,7 @@ class LineGraph extends Component {
       const element = data[i];
       const parsedElement = {
         date: new Date(element.date),
-        employment: element.current_employment
+        employment: parseInt(element.current_employment)
       }
       parsedArr.push(parsedElement)
     }
